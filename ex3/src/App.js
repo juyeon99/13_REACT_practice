@@ -13,6 +13,7 @@ function TodoApp() {
       setTodos(todosCopy);
       setNextId(nextId + 1);
       setInputText('');
+      reorder(todosCopy);
   };
 
   const onClickRemove = (id) => {
@@ -23,15 +24,15 @@ function TodoApp() {
   const onChecked = (id) => {
     // isChecked 상태 변경
     const updatedTodos = todos.map(todo => todo.id === id ? {...todo, isChecked: !todo.isChecked} : todo);
-    reorder1(updatedTodos);
+    reorder(updatedTodos);
   };
 
-  function reorder1(updatedTodos) {
+  function reorder(updatedTodos) {
     updatedTodos.sort((a, b) => {
-      if (a.isPriority !== b.isPriority) {
-        return a.isPriority ? -1 : 1;
-      } else if (a.isChecked !== b.isChecked) {
+      if (a.isChecked !== b.isChecked) {
         return a.isChecked ? 1 : -1;
+      } else if (a.isPriority !== b.isPriority) {
+        return a.isPriority ? -1 : 1;
       } else {
         return a.id - b.id;
       }
@@ -48,12 +49,12 @@ function TodoApp() {
   //       todo.id === id ? { ...todo, isPriority: !todo.isPriority } : todo
   //     );
       
-  //     reorder2(updatedTodos);
+  //     reorder(updatedTodos);
   //     return updatedTodos;
   //   });
   // };
   
-  // function reorder2(updatedTodos) {
+  // function reorder(updatedTodos) {
   //   const todosCopy = [...updatedTodos];
   
   //   todosCopy.sort((a, b) => {
@@ -74,22 +75,8 @@ function TodoApp() {
     // isPriority 상태 변경
     const updatedTodos = todos.map(todo => todo.id === id ? {...todo, isPriority: !todo.isPriority} : todo);
     // setTodos(updatedTodos);  // XXX => set함수는 한 번만 사용 가능(reorder 후)
-    reorder2(updatedTodos);
+    reorder(updatedTodos);
   };
-
-  function reorder2(updatedTodos) {
-    updatedTodos.sort((a, b) => {
-      if (a.isPriority !== b.isPriority) {  // priority가 서로 다르면 true를 먼저
-        return a.isPriority ? -1 : 1;
-      } else if (a.isChecked !== b.isChecked) { 
-        return a.isChecked ? 1 : -1;
-      } else {  // priority가 서로 같으면 id로 순서 정하기
-        return a.id - b.id;
-      }
-    });
-
-    setTodos(updatedTodos);
-  }
 
   const enterKeyDown = (e) => {
     if (e.key === 'Enter' && inputText.trim() !== '') {
